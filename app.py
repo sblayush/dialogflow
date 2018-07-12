@@ -1,6 +1,8 @@
-from flask import Flask
+from flask import Flask, Response
 from datetime import datetime
+import json
 app = Flask(__name__)
+
 
 @app.route('/')
 def homepage():
@@ -13,6 +15,20 @@ def homepage():
     <img src="http://loremflickr.com/600/400" />
     """.format(time=the_time)
 
+
+@app.route('/DialogFlow/Test', methods=['POST'])
+def post_dialogflow_test():
+    print("Got request for DialogFlow!")
+    resp_obj = {
+        'speech': 'This is a speech. Temperature of Blr is 0C',
+        'displayText': 'This is a speech. Temperature of Blr is 0C',
+        'source': 'Temp API'
+    }
+    resp = Response(json.dumps(resp_obj).encode('utf-8'), status=200, mimetype='application/json')
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Content-Type'] = 'application/json'
+    return resp
+
+
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
-
