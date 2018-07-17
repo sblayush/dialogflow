@@ -20,11 +20,7 @@ def homepage():
 @app.route('/DialogFlow/Test', methods=['POST'])
 def post_dialogflow_test():
 	print("Got request for DialogFlow!")
-	# resp_obj = {
-	#     'speech': 'This is a speech. Temperature of Blr is 0C',
-	#     'displayText': 'This is a speech. Temperature of Blr is 0C',
-	#     'source': 'Temp API'
-	# }
+	print("request data",request.data)
 	resp_obj = {
 		"payload": {
 			"google": {
