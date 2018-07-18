@@ -21,7 +21,7 @@ def homepage():
 def post_dialogflow_test():
 	print("Got request for DialogFlow!")
 	x=json.loads(request.data.decode('utf-8'))
-	print(x["fulfillmentMessages"])
+	print(x["queryResult"]["fulfillmentMessages"])
 	resp_obj = {
 		"payload": {
 			"google": {
