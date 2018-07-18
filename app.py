@@ -20,9 +20,7 @@ def homepage():
 @app.route('/DialogFlow/Test', methods=['POST'])
 def post_dialogflow_test():
 	print("Got request for DialogFlow!")
-	print("request data",request.data)
-	x=json.load(request.data)
-	print("hmmmmmm====>",x["fulfillmentText"])
+	print("request data",request.data.decode('utf-8'))
 	resp_obj = {
 		"payload": {
 			"google": {
