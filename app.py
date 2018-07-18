@@ -5,7 +5,7 @@ import requests
 
 app = Flask(__name__)
 
-
+accountMap={"123456789":"vivek tiwari","223456789":"Madhu Bhangi","323456789":"Hari Krishnan"}
 @app.route('/')
 def homepage():
 	the_time = datetime.now().strftime("%A, %d %b %Y %l:%M %p")
@@ -26,6 +26,21 @@ def post_dialogflow_test():
 	#testdata={"query": "{getAccounts(filter:{filterParams :[{property: accountNumber operation:EQUALS value: '6514363164383'}]},pagination: { offset: 0 , limit : 10}){accounts {accountNumber customer{name}}}}"}
 	#r=requests.post('https://hyperlite-graphql-server-release.pcfomactl.dev.intranet/graphql', data = testdata,verify=False)
 	#print(r.json())
+	respString=""
+	if x["queryResult"]["intent"]["displayName"]=="getAccountInfo":
+		if x["queryResult"]["parameters"] is not None and x["queryResult"]["parameters"]["acc_no"] is not None:
+			if x["queryResult"]["parameters"]["acc_no"] in accountMap:
+				respString="Thanks for providing me the account Number {}.Your customer name is {}.".format(x["queryResult"]["parameters"]["acc_no"],accountMap[x["queryResult"]["parameters"]["acc_no"]])
+			else:
+				respString="Your account number {} seems to be wrong or not registered.Please provide correct Account Number."
+		else:
+			respString="Your account number {} seems to be wrong.Please provide correct Account Number."
+	elif x["queryResult"]["intent"]["displayName"]=="temperature intent":
+		respString="Temperature of Blr is 20 degrees Celcius!"
+	else:
+		respString="Intent identified {} has not been mapped to any specific backend.This is a generic response".format(x["queryResult"]["intent"]["displayName"])
+
+
 	resp_obj = {
 		"payload": {
 			"google": {
@@ -34,7 +49,7 @@ def post_dialogflow_test():
 					"items": [
 						{
 							"simpleResponse": {
-								"textToSpeech": "Temperature of Blr is 0C"
+								"textToSpeech": respString
 							}
 						}
 					]
