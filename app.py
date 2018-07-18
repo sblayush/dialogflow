@@ -24,7 +24,7 @@ def post_dialogflow_test():
 	x=json.loads(request.data.decode('utf-8'))
 	print(x["queryResult"]["fulfillmentMessages"])
 	testdata={"query": "{getAccounts(filter:{filterParams :[{property: accountNumber operation:EQUALS value: '6514363164383'}]},pagination: { offset: 0 , limit : 10}){accounts {accountNumber customer{name}}}}"}
-	r=requests.post('https://hyperlite-graphql-server-release.pcfomactl.dev.intranet/graphql', data = testdata)
+	r=requests.post('https://hyperlite-graphql-server-release.pcfomactl.dev.intranet/graphql', data = testdata,verify=False)
 	print(r.json())
 	resp_obj = {
 		"payload": {
