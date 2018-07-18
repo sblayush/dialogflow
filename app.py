@@ -23,9 +23,9 @@ def post_dialogflow_test():
 	print("Got request for DialogFlow!")
 	x=json.loads(request.data.decode('utf-8'))
 	print(x["queryResult"]["fulfillmentMessages"])
-	testdata={"query": "{getAccounts(filter:{filterParams :[{property: accountNumber operation:EQUALS value: '6514363164383'}]},pagination: { offset: 0 , limit : 10}){accounts {accountNumber customer{name}}}}"}
-	r=requests.post('https://hyperlite-graphql-server-release.pcfomactl.dev.intranet/graphql', data = testdata,verify=False)
-	print(r.json())
+	#testdata={"query": "{getAccounts(filter:{filterParams :[{property: accountNumber operation:EQUALS value: '6514363164383'}]},pagination: { offset: 0 , limit : 10}){accounts {accountNumber customer{name}}}}"}
+	#r=requests.post('https://hyperlite-graphql-server-release.pcfomactl.dev.intranet/graphql', data = testdata,verify=False)
+	#print(r.json())
 	resp_obj = {
 		"payload": {
 			"google": {
@@ -34,7 +34,7 @@ def post_dialogflow_test():
 					"items": [
 						{
 							"simpleResponse": {
-								"textToSpeech": "This is a speech. Temperature of Blr is 0C"
+								"textToSpeech": "Temperature of Blr is 0C"
 							}
 						}
 					]
