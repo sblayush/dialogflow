@@ -6,7 +6,10 @@ import requests
 app = Flask(__name__)
 
 accountMap={"123456789":"vivek tiwari","223456789":"Madhu Bhangi","323456789":"Hari Krishnan"}
-sessMap={}
+#sessMap={}
+ctx = app.app_context()
+ctx.g.sessMap={}
+ctx.push()
 @app.route('/')
 def homepage():
 	the_time = datetime.now().strftime("%A, %d %b %Y %l:%M %p")
@@ -24,7 +27,7 @@ def post_dialogflow_test():
 	print("Got request for DialogFlow!")
 	x=json.loads(request.data.decode('utf-8'))
 	print(x)
-	print("x[\"session\"]=",x["session"])
+	# print("x[\"session\"]=",x["session"])
 	sessionId=x["session"]
 	sessionId=sessionId[sessionId.find("projects/myfirst-6a1d1/agent/sessions/")+len("projects/myfirst-6a1d1/agent/sessions/"):]
 
@@ -36,8 +39,8 @@ def post_dialogflow_test():
 		if x["queryResult"]["parameters"] is not None and x["queryResult"]["parameters"]["acc_no"] is not None:
 			if x["queryResult"]["parameters"]["acc_no"] in accountMap:
 				respString="Thanks for providing me the account Number {}.Your customer name is {}.".format(x["queryResult"]["parameters"]["acc_no"],accountMap[x["queryResult"]["parameters"]["acc_no"]])
-				sessMap[sessionId]=True
-				print(sessMap)
+				ctx.g.sessMap[sessionId]=True
+				print(ctx.g.sessMap)
 			else:
 				respString="Your account number {} seems to be wrong or not registered.Please provide correct Account Number.".format(x["queryResult"]["parameters"]["acc_no"])
 		else:
@@ -45,12 +48,12 @@ def post_dialogflow_test():
 	elif x["queryResult"]["intent"]["displayName"]=="temperature intent":
 		respString="Temperature of Blr is 20 degrees Celcius!"
 	elif x["queryResult"]["intent"]["displayName"]=="internet-outage":
-		if sessionId not in sessMap:
+		if sessionId not in ctx.g.sessMap:
 			respString="Please provide me your account Number"
 		else:
 			respString="There seems to be a network issue going on"
 	elif x["queryResult"]["intent"]["displayName"]=="getBillingInfo":
-		if sessionId not in sessMap:
+		if sessionId not in ctx.g.sessMap:
 			respString="Please provide me your account Number"
 		else:
 			respString="Your account balance is $1000"
