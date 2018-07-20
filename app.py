@@ -37,6 +37,8 @@ def post_dialogflow_test():
 			respString="Your account number {} seems to be wrong.Please provide correct Account Number."
 	elif x["queryResult"]["intent"]["displayName"]=="temperature intent":
 		respString="Temperature of Blr is 20 degrees Celcius!"
+	elif x["queryResult"]["intent"]["displayName"]=="internet-outage":
+		respString="Oh! Let me check. Please provide me your account Number"
 	else:
 		respString="Intent identified {} has not been mapped to any specific backend.This is a generic response".format(x["queryResult"]["intent"]["displayName"])
 
