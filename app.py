@@ -43,12 +43,12 @@ def post_dialogflow_test():
 	elif x["queryResult"]["intent"]["displayName"]=="internet-outage":
 		if sessionId not in sessMap:
 			respString="Please provide me your account Number"
-		else
+		else:
 			respString="There seems to be a network issue going on"
 	elif x["queryResult"]["intent"]["displayName"]=="getBillingInfo":
 		if sessionId not in sessMap:
 			respString="Please provide me your account Number"
-		else
+		else:
 			respString="Your account balance is $1000"
 	else:
 		respString="Intent identified {} has not been mapped to any specific backend.This is a generic response".format(x["queryResult"]["intent"]["displayName"])
