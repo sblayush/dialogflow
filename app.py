@@ -24,7 +24,10 @@ def post_dialogflow_test():
 	print("Got request for DialogFlow!")
 	x=json.loads(request.data.decode('utf-8'))
 	print(x)
+	print("x[\"session\"]=",x["session"])
 	sessionId=x["session"]
+	sessionId=sessionId[sessionId.find("projects/myfirst-6a1d1/agent/sessions/")+len("projects/myfirst-6a1d1/agent/sessions/"):]
+
 	#testdata={"query": "{getAccounts(filter:{filterParams :[{property: accountNumber operation:EQUALS value: '6514363164383'}]},pagination: { offset: 0 , limit : 10}){accounts {accountNumber customer{name}}}}"}
 	#r=requests.post('https://hyperlite-graphql-server-release.pcfomactl.dev.intranet/graphql', data = testdata,verify=False)
 	#print(r.json())
@@ -34,6 +37,7 @@ def post_dialogflow_test():
 			if x["queryResult"]["parameters"]["acc_no"] in accountMap:
 				respString="Thanks for providing me the account Number {}.Your customer name is {}.".format(x["queryResult"]["parameters"]["acc_no"],accountMap[x["queryResult"]["parameters"]["acc_no"]])
 				sessMap[sessionId]=True
+				print(sessMap)
 			else:
 				respString="Your account number {} seems to be wrong or not registered.Please provide correct Account Number.".format(x["queryResult"]["parameters"]["acc_no"])
 		else:
