@@ -6,6 +6,7 @@ import requests
 app = Flask(__name__)
 
 accountMap={"123456789":"vivek tiwari","223456789":"Madhu Bhangi","323456789":"Hari Krishnan"}
+sessMap={}
 @app.route('/')
 def homepage():
 	the_time = datetime.now().strftime("%A, %d %b %Y %l:%M %p")
@@ -23,6 +24,7 @@ def post_dialogflow_test():
 	print("Got request for DialogFlow!")
 	x=json.loads(request.data.decode('utf-8'))
 	print(x)
+	sessionId=x["queryResult"]["session"]
 	#testdata={"query": "{getAccounts(filter:{filterParams :[{property: accountNumber operation:EQUALS value: '6514363164383'}]},pagination: { offset: 0 , limit : 10}){accounts {accountNumber customer{name}}}}"}
 	#r=requests.post('https://hyperlite-graphql-server-release.pcfomactl.dev.intranet/graphql', data = testdata,verify=False)
 	#print(r.json())
@@ -31,6 +33,7 @@ def post_dialogflow_test():
 		if x["queryResult"]["parameters"] is not None and x["queryResult"]["parameters"]["acc_no"] is not None:
 			if x["queryResult"]["parameters"]["acc_no"] in accountMap:
 				respString="Thanks for providing me the account Number {}.Your customer name is {}.".format(x["queryResult"]["parameters"]["acc_no"],accountMap[x["queryResult"]["parameters"]["acc_no"]])
+				sessMap[sessionId]=True
 			else:
 				respString="Your account number {} seems to be wrong or not registered.Please provide correct Account Number.".format(x["queryResult"]["parameters"]["acc_no"])
 		else:
@@ -38,7 +41,15 @@ def post_dialogflow_test():
 	elif x["queryResult"]["intent"]["displayName"]=="temperature intent":
 		respString="Temperature of Blr is 20 degrees Celcius!"
 	elif x["queryResult"]["intent"]["displayName"]=="internet-outage":
-		respString="Oh! Let me check. Please provide me your account Number"
+		if sessionId not in sessMap:
+			respString="Please provide me your account Number"
+		else
+			respString="There seems to be a network issue going on"
+	elif x["queryResult"]["intent"]["displayName"]=="getBillingInfo":
+		if sessionId not in sessMap:
+			respString="Please provide me your account Number"
+		else
+			respString="Your account balance is $1000"
 	else:
 		respString="Intent identified {} has not been mapped to any specific backend.This is a generic response".format(x["queryResult"]["intent"]["displayName"])
 
