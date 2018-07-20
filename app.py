@@ -48,11 +48,13 @@ def post_dialogflow_test():
 	elif x["queryResult"]["intent"]["displayName"]=="temperature intent":
 		respString="Temperature of Blr is 20 degrees Celcius!"
 	elif x["queryResult"]["intent"]["displayName"]=="internet-outage":
+		print(ctx.g.sessMap)
 		if sessionId not in ctx.g.sessMap:
 			respString="Please provide me your account Number"
 		else:
 			respString="There seems to be a network issue going on"
 	elif x["queryResult"]["intent"]["displayName"]=="getBillingInfo":
+		print(ctx.g.sessMap)
 		if sessionId not in ctx.g.sessMap:
 			respString="Please provide me your account Number"
 		else:
